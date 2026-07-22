@@ -24,14 +24,19 @@
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;margin:0;}
+  html,body{margin:0;}
   body{
     font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color:var(--ink);
     min-height:100dvh;
-    display:flex;align-items:center;justify-content:center;
+    /* column flex + margin:auto on the card centers it when it fits and
+       stays fully scrollable when the card is taller than the viewport.
+       overflow-x:hidden keeps the fixed blobs from adding a sideways
+       scrollbar while leaving vertical scrolling enabled. */
+    display:flex;
+    flex-direction:column;
     padding:18px;
-    overflow:hidden;
+    overflow-x:hidden;
     background:
       radial-gradient(1200px 600px at 15% -10%, #312e81 0%, transparent 55%),
       radial-gradient(1000px 700px at 110% 20%, #6d28d9 0%, transparent 50%),
@@ -48,6 +53,7 @@
   .card{
     position:relative;z-index:1;
     width:min(460px,100%);
+    margin:auto;            /* scroll-safe centering (see body comment) */
     background:var(--card);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
@@ -253,10 +259,37 @@
   /* confetti */
   #confetti{position:fixed;inset:0;pointer-events:none;z-index:4;}
 
+  /* On short viewports, tighten spacing so the (tallest) start screen
+     usually fits without scrolling. Scrolling still works as a fallback. */
   @media (max-height:680px){
+    body{padding:10px;}
+    .card{padding:18px 20px 16px;}
+    h1{font-size:26px;}
+    .tag{font-size:14px;margin:0 0 12px;}
+    .best-badge{padding:11px 14px;margin-bottom:12px;}
+    .best-badge .val{font-size:30px;}
+    .rules{margin:0 0 12px;}
+    .rules li{padding:7px 0;font-size:14px;}
+    .field{margin:0 0 12px;}
+    .seg{margin-bottom:10px;}
+    .seg-btn{padding:8px;}
+    .hint{margin:0 0 8px;}
+    .tcell{padding:8px 0;font-size:14px;}
+    .btn{padding:13px;font-size:18px;}
     .problem{font-size:46px;}
+    .problem-card{padding:18px 16px;margin:10px 0;}
     .answer{font-size:32px;}
-    .result-num{font-size:56px;}
+    .keypad{gap:6px;}
+    .key{padding:11px 0;font-size:22px;}
+    .result-num{font-size:52px;}
+    .cmp{margin:10px 0 14px;}
+  }
+  /* Very short: shrink the hero number and problem further. */
+  @media (max-height:560px){
+    h1{font-size:23px;}
+    .problem{font-size:38px;}
+    .result-num{font-size:44px;}
+    .rules li{padding:6px 0;}
   }
 </style>
 </head>
