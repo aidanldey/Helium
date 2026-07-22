@@ -13,7 +13,7 @@ Open `minute-math.html` in any modern browser. No build step, no server, no inte
 - **Instant feedback.** Answers check as you type, so you never need to press Enter. Correct answers flash green with a chime; misses buzz and reset your streak.
 - **Choose exactly which tables to drill.** Two modes: *Up to a table* includes every table from 1× up to the one you pick, or *Pick each* lets you toggle any individual tables (1×–12×) with All/None shortcuts. Every problem is built only from the tables you selected.
 - **Play your way.** Type with a keyboard or use the on-screen keypad on touch devices.
-- **End-of-round summary.** See your score, accuracy, and best streak — with a confetti celebration and fanfare when you set a new record.
+- **End-of-round summary.** Your round (problems solved, accuracy, best streak) is shown side by side with your all-time records (All-Time High, Best Accuracy, Longest Streak) for easy comparison. Beat a record in any of the three categories and you get confetti, a fanfare, a gold "NEW" badge on each record you broke, and a temporary toast spelling out what you achieved. (An accuracy record needs at least five answered problems, so a lucky two-problem round can't lock in 100%.)
 
 ## Design notes
 

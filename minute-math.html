@@ -196,20 +196,48 @@
   .key.del{background:#fef3c7;}
 
   /* END screen */
-  .result-num{font-size:74px;font-weight:800;text-align:center;line-height:1;color:var(--brand);margin:6px 0 2px;}
-  .result-cap{text-align:center;color:var(--muted);font-size:15px;margin:0 0 6px;}
-  .record{
-    text-align:center;font-weight:800;font-size:18px;color:var(--good);
-    background:var(--good-soft);border-radius:14px;padding:10px;margin:12px 0;
-    animation:pulse 1.2s ease-in-out infinite;
+  .result-num{font-size:70px;font-weight:800;text-align:center;line-height:1;color:var(--brand);margin:2px 0 2px;}
+  .result-cap{text-align:center;color:var(--muted);font-size:15px;margin:0 0 8px;}
+
+  /* round vs records comparison */
+  .cmp{margin:12px 0 18px;}
+  .cmp-row{margin:0;}
+  .cmp-row + .cmp-row{margin-top:10px;padding-top:12px;border-top:1px dashed #e2e8f0;}
+  .cmp-tag{
+    display:block;font-size:11px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:8px;
   }
-  @keyframes pulse{50%{transform:scale(1.03);}}
-  .summary{
-    display:flex;justify-content:space-around;text-align:center;
-    margin:14px 0 18px;padding:14px 0;border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;
+  .cmp-row.records .cmp-tag{color:var(--brand);}
+  .cmp-cells{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;}
+  .cmp-cell{padding:8px 4px;border-radius:12px;transition:background .2s ease;}
+  .cnum{font-size:23px;font-weight:800;line-height:1;}
+  .cmp-row.records .cnum{color:var(--brand);}
+  .clab{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin-top:4px;}
+
+  /* a record that was just beaten */
+  .cmp-cell.hit{
+    position:relative;background:linear-gradient(160deg,#fffbeb,#fef3c7);
+    box-shadow:0 0 0 2px #f59e0b inset;animation:hitPop .5s ease;
   }
-  .summary .num{font-size:24px;font-weight:800;}
-  .summary .cap{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:2px;}
+  .cmp-cell.hit .cnum{color:#b45309;}
+  .cmp-cell.hit::after{
+    content:"NEW";position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+    background:#f59e0b;color:#fff;font-size:9px;font-weight:800;letter-spacing:.06em;
+    padding:2px 7px;border-radius:999px;box-shadow:0 3px 8px -2px rgba(245,158,11,.7);
+  }
+  @keyframes hitPop{0%{transform:scale(.85);}60%{transform:scale(1.06);}100%{transform:scale(1);}}
+
+  /* temporary achievement toast */
+  .toast{
+    position:absolute;top:14px;left:50%;z-index:6;
+    transform:translate(-50%,-160%);opacity:0;pointer-events:none;
+    max-width:calc(100% - 40px);text-align:center;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;
+    font-size:14.5px;font-weight:800;line-height:1.3;
+    padding:12px 18px;border-radius:14px;box-shadow:0 16px 34px -12px rgba(79,70,229,.8);
+    transition:transform .45s cubic-bezier(.2,.9,.25,1.4),opacity .35s ease;
+  }
+  .toast.show{transform:translate(-50%,0);opacity:1;}
 
   /* countdown overlay */
   .countdown{
@@ -326,14 +354,25 @@
     <section class="screen" id="endScreen">
       <p class="tag" style="margin-bottom:0;">Time! Here's how you did.</p>
       <div class="result-num" id="finalScore">0</div>
-      <p class="result-cap">problems solved</p>
+      <p class="result-cap">problems solved this round</p>
 
-      <div class="record" id="recordBanner" style="display:none;">🎉 New personal best!</div>
-
-      <div class="summary">
-        <div><div class="num" id="sumBest" style="color:var(--brand)">0</div><div class="cap">Best</div></div>
-        <div><div class="num" id="sumAcc">0%</div><div class="cap">Accuracy</div></div>
-        <div><div class="num" id="sumStreak" style="color:#ea580c">0</div><div class="cap">Best Streak</div></div>
+      <div class="cmp">
+        <div class="cmp-row">
+          <span class="cmp-tag">This round</span>
+          <div class="cmp-cells">
+            <div class="cmp-cell"><div class="cnum" id="rSolved">0</div><div class="clab">Solved</div></div>
+            <div class="cmp-cell"><div class="cnum" id="rAcc">0%</div><div class="clab">Accuracy</div></div>
+            <div class="cmp-cell"><div class="cnum" id="rStreak">0</div><div class="clab">Best Streak</div></div>
+          </div>
+        </div>
+        <div class="cmp-row records">
+          <span class="cmp-tag">Your records</span>
+          <div class="cmp-cells">
+            <div class="cmp-cell" id="recScore"><div class="cnum" id="bScore">0</div><div class="clab">All-Time High</div></div>
+            <div class="cmp-cell" id="recAcc"><div class="cnum" id="bAcc">0%</div><div class="clab">Best Accuracy</div></div>
+            <div class="cmp-cell" id="recStreak"><div class="cnum" id="bStreak">0</div><div class="clab">Longest Streak</div></div>
+          </div>
+        </div>
       </div>
 
       <button class="btn" id="againBtn">Play Again&nbsp;↻</button>
@@ -341,6 +380,9 @@
         <button class="btn ghost" id="menuBtn">Menu</button>
       </div>
     </section>
+
+    <!-- temporary achievement toast -->
+    <div class="toast" id="toast"><span id="toastText"></span></div>
 
     <!-- countdown overlay -->
     <div class="countdown" id="countdown"><div class="count-num" id="countNum">3</div></div>
@@ -351,7 +393,10 @@
   "use strict";
 
   const GAME_SECONDS = 60;
-  const BEST_KEY = "minuteMathBest_v1";
+  const BEST_KEY = "minuteMathBest_v1";           // all-time high score
+  const ACC_KEY = "minuteMathBestAcc_v1";         // best accuracy (%)
+  const STREAK_KEY = "minuteMathLongestStreak_v1";// longest streak
+  const MIN_ATTEMPTS_ACC = 5;                     // guard trivial accuracy records
 
   // ---------- element refs ----------
   const $ = id => document.getElementById(id);
@@ -361,8 +406,11 @@
   const timerBar = $("timerBar");
   const aEl = $("a"), bEl = $("b"), problemEl = $("problem"), problemCard = $("problemCard");
   const answerEl = $("answer");
-  const finalScoreEl = $("finalScore"), recordBanner = $("recordBanner");
-  const sumBest = $("sumBest"), sumAcc = $("sumAcc"), sumStreak = $("sumStreak");
+  const finalScoreEl = $("finalScore");
+  const rSolved = $("rSolved"), rAcc = $("rAcc"), rStreak = $("rStreak");
+  const bScore = $("bScore"), bAcc = $("bAcc"), bStreak = $("bStreak");
+  const recScore = $("recScore"), recAcc = $("recAcc"), recStreak = $("recStreak");
+  const toastEl = $("toast"), toastText = $("toastText");
   const countdownEl = $("countdown"), countNum = $("countNum");
   const soundBtn = $("soundBtn");
 
@@ -419,8 +467,8 @@
     Object.values(screens).forEach(s=>s.classList.remove("active"));
     screens[name].classList.add("active");
   }
-  function getBest(){ const v = parseInt(localStorage.getItem(BEST_KEY),10); return isNaN(v)?0:v; }
-  function setBest(v){ try{ localStorage.setItem(BEST_KEY, String(v)); }catch(e){} }
+  function getNum(key){ const v = parseInt(localStorage.getItem(key),10); return isNaN(v)?0:v; }
+  function setNum(key,v){ try{ localStorage.setItem(key, String(v)); }catch(e){} }
 
   // which tables are in play, given the current selector state
   function currentTables(){
@@ -510,6 +558,7 @@
   }
 
   function startGame(){
+    hideToast();
     score=0; streak=0; bestStreak=0; attempts=0; correct=0;
     timeLeft=GAME_SECONDS;
     scoreEl.textContent="0"; streakEl.textContent="0"; timeLeftEl.textContent=GAME_SECONDS;
@@ -547,22 +596,68 @@
     },800);
   }
 
+  let toastTimer = null;
+  function showToast(list){
+    let msg;
+    if(list.length === 1){
+      msg = list[0].icon + " " + list[0].full;
+    }else{
+      msg = "🎉 " + list.length + " new records! " + list.map(a=>a.icon + " " + a.short).join("  ·  ");
+    }
+    toastText.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toastEl.classList.remove("show"), 4800);
+  }
+  function hideToast(){ clearTimeout(toastTimer); toastEl.classList.remove("show"); }
+
   function endGame(){
     running=false;
     clearInterval(tickHandle);
-    const best = getBest();
-    const isRecord = score > best;
-    if(isRecord) setBest(score);
-    finalScoreEl.textContent = score;
-    sumBest.textContent = Math.max(best, score);
-    sumStreak.textContent = bestStreak;
+
     const acc = attempts>0 ? Math.round((correct/attempts)*100) : 0;
-    sumAcc.textContent = acc + "%";
-    recordBanner.style.display = isRecord ? "block" : "none";
+
+    // previous records
+    const prevScore = getNum(BEST_KEY);
+    const prevAcc = getNum(ACC_KEY);
+    const prevStreak = getNum(STREAK_KEY);
+
+    // did this round set a new record in each category?
+    const scoreRec  = score > prevScore && score > 0;
+    const accRec    = acc > prevAcc && attempts >= MIN_ATTEMPTS_ACC;
+    const streakRec = bestStreak > prevStreak && bestStreak > 0;
+
+    if(scoreRec)  setNum(BEST_KEY, score);
+    if(accRec)    setNum(ACC_KEY, acc);
+    if(streakRec) setNum(STREAK_KEY, bestStreak);
+
+    // this round
+    finalScoreEl.textContent = score;
+    rSolved.textContent = score;
+    rAcc.textContent = acc + "%";
+    rStreak.textContent = bestStreak;
+
+    // records (after any updates)
+    bScore.textContent = getNum(BEST_KEY);
+    bAcc.textContent = getNum(ACC_KEY) + "%";
+    bStreak.textContent = getNum(STREAK_KEY);
+
+    // highlight the record tiles that were just beaten
+    recScore.classList.toggle("hit", scoreRec);
+    recAcc.classList.toggle("hit", accRec);
+    recStreak.classList.toggle("hit", streakRec);
+
+    // build the achievement message
+    const wins = [];
+    if(scoreRec)  wins.push({icon:"🏆", full:"New all-time high: " + score + " solved!", short:"High score"});
+    if(accRec)    wins.push({icon:"🎯", full:"New best accuracy: " + acc + "%!", short:"Accuracy"});
+    if(streakRec) wins.push({icon:"🔥", full:"New longest streak: " + bestStreak + "!", short:"Streak"});
+
     show("end");
-    bestStartEl.textContent = getBest();
-    if(isRecord){ sfx.fanfare(); launchConfetti(); }
-    else { sfx.end(); }
+    bestStartEl.textContent = getNum(BEST_KEY);
+
+    if(wins.length){ showToast(wins); sfx.fanfare(); launchConfetti(); }
+    else { hideToast(); sfx.end(); }
   }
 
   // ---------- confetti ----------
@@ -677,7 +772,7 @@
     audio(); runCountdown();
   });
   $("againBtn").addEventListener("click", ()=>{ audio(); runCountdown(); });
-  $("menuBtn").addEventListener("click", ()=>{ bestStartEl.textContent=getBest(); show("start"); });
+  $("menuBtn").addEventListener("click", ()=>{ bestStartEl.textContent=getNum(BEST_KEY); show("start"); });
 
   answerEl.addEventListener("input", ()=>{ if(running) onType(); });
   answerEl.addEventListener("keydown", e=>{
@@ -703,7 +798,7 @@
 
   // ---------- init ----------
   buildGrids();
-  bestStartEl.textContent = getBest();
+  bestStartEl.textContent = getNum(BEST_KEY);
 })();
 </script>
 </body>
