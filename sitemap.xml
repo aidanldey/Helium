@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap.xml for homelearners.org
+  Place this file at the site root: https://homelearners.org/sitemap.xml
+  (and it must be referenced from robots.txt, which it already is here).
+
+  This starter includes only the Minute Math game. As you publish more
+  pages/games on HomeLearners.org, add one <url> block per page below.
+  Update <lastmod> whenever a page's content changes meaningfully.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://homelearners.org/minute-math.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

@@ -30,4 +30,13 @@ Built for hosting on **HomeLearners.org** (a subtle byline links back to the sit
 - A self-contained SVG favicon (data URI — no separate icon file).
 - **Structured data (JSON-LD)** describing the page as a free `LearningResource` / `WebApplication` that *teaches* multiplication facts, aimed at students, parents, teachers, and homeschoolers, aligned to Common Core `3.OA.C.7`. This is what helps Google rich results — and AI assistants — understand and recommend it as a free multiplication-practice resource.
 
-**Before publishing:** the canonical/share URL defaults to `https://homelearners.org/minute-math.html`. If you host it at a different path, update the URL in three places in `<head>` (the `canonical` link, the `og:url` meta, and the `url` field in the JSON-LD) — there's a comment at the top of `<head>` marking them. For best AI/search crawler access, also allow crawlers (including AI bots such as `GPTBot`, `ClaudeBot`, `PerplexityBot`, and `Google-Extended`) in the site's `robots.txt` and add the page to your sitemap.
+**Before publishing:** the canonical/share URL defaults to `https://homelearners.org/minute-math.html`. If you host it at a different path, update the URL in three places in `<head>` (the `canonical` link, the `og:url` meta, and the `url` field in the JSON-LD) — there's a comment at the top of `<head>` marking them, and you'll also need to update `sitemap.xml` to match.
+
+### `robots.txt` and `sitemap.xml`
+
+Starter files are included in this repo for the site root (not just this one page):
+
+- **`robots.txt`** — allows all crawlers, and explicitly welcomes AI assistants and AI-search crawlers by name (`GPTBot`, `ChatGPT-User`, `ClaudeBot`, `Claude-User`, `PerplexityBot`, `Google-Extended`, etc.) so it's unambiguous they're invited to read, index, and recommend the content. It points to the sitemap.
+- **`sitemap.xml`** — currently lists just `minute-math.html`. As you publish more pages/games on HomeLearners.org, add one `<url>` block per page and bump `<lastmod>` when content changes meaningfully.
+
+Deploy both at the **site root** — `https://homelearners.org/robots.txt` and `https://homelearners.org/sitemap.xml` — not nested in a subfolder, or crawlers won't find them at their expected well-known locations. If HomeLearners.org already has a `robots.txt`/`sitemap.xml`, merge these entries into the existing files rather than overwriting them.
