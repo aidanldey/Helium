@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#4f46e5" />
+<title>Minute Math — Beat Your Best</title>
+<style>
+  :root{
+    --bg-1:#0f172a;
+    --bg-2:#1e1b4b;
+    --card:#ffffff;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --brand:#4f46e5;
+    --brand-2:#7c3aed;
+    --good:#16a34a;
+    --good-soft:#dcfce7;
+    --bad:#dc2626;
+    --bad-soft:#fee2e2;
+    --ring-track:#e2e8f0;
+    --shadow:0 20px 60px -15px rgba(15,23,42,.45);
+    --radius:26px;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;margin:0;}
+  body{
+    font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+    overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #312e81 0%, transparent 55%),
+      radial-gradient(1000px 700px at 110% 20%, #6d28d9 0%, transparent 50%),
+      linear-gradient(160deg,var(--bg-1),var(--bg-2));
+  }
+
+  /* floating background blobs */
+  .blob{position:fixed;border-radius:50%;filter:blur(50px);opacity:.35;z-index:0;pointer-events:none;}
+  .blob.a{width:340px;height:340px;background:#6366f1;top:-80px;left:-60px;animation:drift 16s ease-in-out infinite;}
+  .blob.b{width:300px;height:300px;background:#a855f7;bottom:-90px;right:-40px;animation:drift 20s ease-in-out infinite reverse;}
+  .blob.c{width:220px;height:220px;background:#38bdf8;bottom:20%;left:8%;animation:drift 24s ease-in-out infinite;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,-30px) scale(1.12);}}
+
+  .card{
+    position:relative;z-index:1;
+    width:min(460px,100%);
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px 24px 22px;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0 0 auto 0;height:6px;
+    background:linear-gradient(90deg,var(--brand),var(--brand-2),#ec4899);
+  }
+
+  .screen{display:none;animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+
+  h1{font-size:30px;line-height:1.05;margin:6px 0 2px;letter-spacing:-.02em;}
+  h1 .accent{background:linear-gradient(90deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:15px;margin:0 0 18px;}
+
+  .rules{list-style:none;padding:0;margin:0 0 20px;}
+  .rules li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #eef2f7;font-size:15px;}
+  .rules li:first-child{border-top:none;}
+  .rules .emoji{font-size:20px;line-height:1.3;}
+
+  .best-badge{
+    display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(135deg,#eef2ff,#faf5ff);
+    border:1px solid #e0e7ff;border-radius:16px;
+    padding:14px 16px;margin-bottom:18px;
+  }
+  .best-badge .label{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .best-badge .val{font-size:34px;font-weight:800;color:var(--brand);line-height:1;}
+  .best-badge .trophy{font-size:34px;}
+
+  .field{margin:0 0 18px;}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    border:2px solid #e2e8f0;background:#fff;color:var(--ink);
+    padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;
+    transition:transform .12s ease,border-color .12s ease,background .12s ease;
+  }
+  .chip:hover{transform:translateY(-1px);}
+  .chip.sel{border-color:var(--brand);background:var(--brand);color:#fff;box-shadow:0 6px 16px -6px var(--brand);}
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    border:none;cursor:pointer;font-family:inherit;
+    font-size:19px;font-weight:800;color:#fff;
+    padding:16px;border-radius:16px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    box-shadow:0 12px 26px -10px var(--brand);
+    transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+  .btn:active{transform:translateY(0);}
+  .btn.ghost{background:#f1f5f9;color:var(--ink);box-shadow:none;}
+  .btn.ghost:hover{background:#e2e8f0;}
+  .btn-row{display:flex;gap:10px;margin-top:12px;}
+  .btn-row .btn{font-size:16px;padding:14px;}
+
+  .sound-toggle{
+    position:absolute;top:16px;right:16px;z-index:3;
+    width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;
+    background:#f1f5f9;font-size:19px;line-height:40px;text-align:center;
+    transition:background .12s ease;
+  }
+  .sound-toggle:hover{background:#e2e8f0;}
+
+  /* PLAY screen */
+  .hud{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .stat{text-align:center;}
+  .stat .num{font-size:26px;font-weight:800;line-height:1;}
+  .stat .cap{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:3px;}
+  .stat .num.score{color:var(--brand);}
+  .stat .num.streak{color:#ea580c;}
+
+  .timer-wrap{position:relative;width:78px;height:78px;}
+  .timer-wrap svg{transform:rotate(-90deg);}
+  .timer-wrap .t-track{stroke:var(--ring-track);}
+  .timer-wrap .t-bar{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset .25s linear,stroke .3s ease;}
+  .timer-wrap .t-num{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:24px;font-weight:800;
+  }
+
+  .problem-card{
+    margin:14px 0 12px;padding:26px 16px;border-radius:20px;
+    background:linear-gradient(160deg,#f8fafc,#eef2ff);
+    border:1px solid #e2e8f0;text-align:center;
+    transition:background .2s ease,transform .12s ease;
+  }
+  .problem-card.flash-good{background:linear-gradient(160deg,var(--good-soft),#bbf7d0);animation:shakeGood .3s;}
+  .problem-card.flash-bad{background:linear-gradient(160deg,var(--bad-soft),#fecaca);animation:shakeBad .35s;}
+  @keyframes shakeGood{50%{transform:scale(1.03);}}
+  @keyframes shakeBad{25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+  .problem{font-size:58px;font-weight:800;letter-spacing:.01em;line-height:1;}
+  .problem .x{color:var(--brand-2);margin:0 6px;}
+
+  .answer{
+    width:100%;text-align:center;font-family:inherit;
+    font-size:40px;font-weight:800;color:var(--ink);
+    padding:12px;border:3px solid #e2e8f0;border-radius:16px;
+    background:#fff;outline:none;caret-color:var(--brand);
+    transition:border-color .15s ease;
+  }
+  .answer:focus{border-color:var(--brand);}
+  .answer::placeholder{color:#cbd5e1;font-weight:600;}
+
+  /* on-screen keypad */
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+  .key{
+    font-family:inherit;font-size:24px;font-weight:800;color:var(--ink);
+    padding:14px 0;border-radius:14px;border:none;cursor:pointer;
+    background:#f1f5f9;transition:transform .08s ease,background .12s ease;
+    user-select:none;
+  }
+  .key:hover{background:#e2e8f0;}
+  .key:active{transform:scale(.94);background:#dbe3ee;}
+  .key.wide{grid-column:span 1;}
+  .key.enter{background:var(--good);color:#fff;}
+  .key.enter:hover{filter:brightness(1.05);}
+  .key.del{background:#fef3c7;}
+
+  /* END screen */
+  .result-num{font-size:74px;font-weight:800;text-align:center;line-height:1;color:var(--brand);margin:6px 0 2px;}
+  .result-cap{text-align:center;color:var(--muted);font-size:15px;margin:0 0 6px;}
+  .record{
+    text-align:center;font-weight:800;font-size:18px;color:var(--good);
+    background:var(--good-soft);border-radius:14px;padding:10px;margin:12px 0;
+    animation:pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse{50%{transform:scale(1.03);}}
+  .summary{
+    display:flex;justify-content:space-around;text-align:center;
+    margin:14px 0 18px;padding:14px 0;border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;
+  }
+  .summary .num{font-size:24px;font-weight:800;}
+  .summary .cap{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:2px;}
+
+  /* countdown overlay */
+  .countdown{
+    position:absolute;inset:0;z-index:5;display:none;
+    align-items:center;justify-content:center;
+    background:rgba(255,255,255,.92);backdrop-filter:blur(2px);
+    border-radius:var(--radius);
+  }
+  .countdown.show{display:flex;}
+  .count-num{font-size:130px;font-weight:800;color:var(--brand);animation:countPop .8s ease;}
+  @keyframes countPop{0%{transform:scale(.3);opacity:0;}45%{transform:scale(1.1);opacity:1;}100%{transform:scale(1);opacity:1;}}
+
+  /* confetti */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:4;}
+
+  @media (max-height:680px){
+    .problem{font-size:46px;}
+    .answer{font-size:32px;}
+    .result-num{font-size:56px;}
+  }
+</style>
+</head>
+<body>
+  <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+  <canvas id="confetti"></canvas>
+
+  <main class="card" id="card">
+    <button class="sound-toggle" id="soundBtn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
+
+    <!-- START -->
+    <section class="screen active" id="startScreen">
+      <h1>Minute&nbsp;<span class="accent">Math</span></h1>
+      <p class="tag">How many can you solve in 60 seconds?</p>
+
+      <div class="best-badge">
+        <div>
+          <div class="label">Your Best</div>
+          <div class="val" id="bestStart">0</div>
+        </div>
+        <div class="trophy">🏆</div>
+      </div>
+
+      <ul class="rules">
+        <li><span class="emoji">⏱️</span><span>You get <b>one minute</b>. Solve as many multiplication problems as you can.</span></li>
+        <li><span class="emoji">🎯</span><span>Every correct answer is a point. There's no minimum — just beat your last score.</span></li>
+        <li><span class="emoji">⚡</span><span>Answers check instantly, so keep the streak rolling.</span></li>
+      </ul>
+
+      <div class="field">
+        <label>Practice tables up to…</label>
+        <div class="chips" id="rangeChips">
+          <button class="chip" data-max="5">5×</button>
+          <button class="chip" data-max="9">9×</button>
+          <button class="chip sel" data-max="12">12×</button>
+        </div>
+      </div>
+
+      <button class="btn" id="startBtn">Start the Minute&nbsp;→</button>
+    </section>
+
+    <!-- PLAY -->
+    <section class="screen" id="playScreen">
+      <div class="hud">
+        <div class="stat"><div class="num score" id="score">0</div><div class="cap">Score</div></div>
+        <div class="timer-wrap">
+          <svg width="78" height="78" viewBox="0 0 78 78">
+            <circle class="t-track" cx="39" cy="39" r="34" fill="none" stroke-width="7"></circle>
+            <circle class="t-bar" id="timerBar" cx="39" cy="39" r="34" fill="none" stroke-width="7"></circle>
+          </svg>
+          <div class="t-num" id="timeLeft">60</div>
+        </div>
+        <div class="stat"><div class="num streak" id="streak">0</div><div class="cap">Streak 🔥</div></div>
+      </div>
+
+      <div class="problem-card" id="problemCard">
+        <div class="problem" id="problem"><span id="a">2</span><span class="x">×</span><span id="b">3</span></div>
+      </div>
+
+      <input class="answer" id="answer" inputmode="numeric" pattern="[0-9]*" autocomplete="off"
+             placeholder="?" aria-label="Your answer" />
+
+      <div class="keypad" id="keypad">
+        <button class="key" data-k="1">1</button>
+        <button class="key" data-k="2">2</button>
+        <button class="key" data-k="3">3</button>
+        <button class="key" data-k="4">4</button>
+        <button class="key" data-k="5">5</button>
+        <button class="key" data-k="6">6</button>
+        <button class="key" data-k="7">7</button>
+        <button class="key" data-k="8">8</button>
+        <button class="key" data-k="9">9</button>
+        <button class="key del" data-k="del">⌫</button>
+        <button class="key" data-k="0">0</button>
+        <button class="key enter" data-k="enter">↵</button>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section class="screen" id="endScreen">
+      <p class="tag" style="margin-bottom:0;">Time! Here's how you did.</p>
+      <div class="result-num" id="finalScore">0</div>
+      <p class="result-cap">problems solved</p>
+
+      <div class="record" id="recordBanner" style="display:none;">🎉 New personal best!</div>
+
+      <div class="summary">
+        <div><div class="num" id="sumBest" style="color:var(--brand)">0</div><div class="cap">Best</div></div>
+        <div><div class="num" id="sumAcc">0%</div><div class="cap">Accuracy</div></div>
+        <div><div class="num" id="sumStreak" style="color:#ea580c">0</div><div class="cap">Best Streak</div></div>
+      </div>
+
+      <button class="btn" id="againBtn">Play Again&nbsp;↻</button>
+      <div class="btn-row">
+        <button class="btn ghost" id="menuBtn">Menu</button>
+      </div>
+    </section>
+
+    <!-- countdown overlay -->
+    <div class="countdown" id="countdown"><div class="count-num" id="countNum">3</div></div>
+  </main>
+
+<script>
+(function(){
+  "use strict";
+
+  const GAME_SECONDS = 60;
+  const BEST_KEY = "minuteMathBest_v1";
+
+  // ---------- element refs ----------
+  const $ = id => document.getElementById(id);
+  const screens = {start:$("startScreen"), play:$("playScreen"), end:$("endScreen")};
+  const bestStartEl = $("bestStart");
+  const scoreEl = $("score"), streakEl = $("streak"), timeLeftEl = $("timeLeft");
+  const timerBar = $("timerBar");
+  const aEl = $("a"), bEl = $("b"), problemEl = $("problem"), problemCard = $("problemCard");
+  const answerEl = $("answer");
+  const finalScoreEl = $("finalScore"), recordBanner = $("recordBanner");
+  const sumBest = $("sumBest"), sumAcc = $("sumAcc"), sumStreak = $("sumStreak");
+  const countdownEl = $("countdown"), countNum = $("countNum");
+  const soundBtn = $("soundBtn");
+
+  // circumference for timer ring (r=34)
+  const CIRC = 2 * Math.PI * 34;
+  timerBar.style.strokeDasharray = CIRC;
+  timerBar.style.strokeDashoffset = 0;
+
+  // ---------- state ----------
+  let maxTable = 12;
+  let curA = 0, curB = 0, curAns = 0;
+  let score = 0, streak = 0, bestStreak = 0, attempts = 0, correct = 0;
+  let timeLeft = GAME_SECONDS;
+  let tickHandle = null;
+  let running = false;
+  let soundOn = true;
+
+  // ---------- sound (WebAudio, no assets) ----------
+  let actx = null;
+  function audio(){
+    if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ actx=null; } }
+    return actx;
+  }
+  function tone(freq, dur, type, gain, when){
+    if(!soundOn) return;
+    const ac = audio(); if(!ac) return;
+    const t0 = ac.currentTime + (when||0);
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = type||"sine";
+    osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain||0.15, t0+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+    osc.connect(g); g.connect(ac.destination);
+    osc.start(t0); osc.stop(t0+dur+0.02);
+  }
+  const sfx = {
+    correct(){ tone(660,0.10,"sine",0.16,0); tone(990,0.14,"sine",0.14,0.07); },
+    wrong(){ tone(180,0.18,"square",0.10,0); },
+    tick(){ tone(880,0.05,"sine",0.08,0); },
+    countBeep(){ tone(520,0.12,"triangle",0.16,0); },
+    go(){ tone(660,0.14,"triangle",0.18,0); tone(880,0.20,"triangle",0.18,0.12); },
+    end(){ tone(523,0.18,"sine",0.16,0); tone(392,0.18,"sine",0.16,0.16); tone(330,0.30,"sine",0.16,0.32); },
+    fanfare(){ [523,659,784,1046].forEach((f,i)=>tone(f,0.22,"triangle",0.18,i*0.11)); }
+  };
+
+  // ---------- helpers ----------
+  function show(name){
+    Object.values(screens).forEach(s=>s.classList.remove("active"));
+    screens[name].classList.add("active");
+  }
+  function getBest(){ const v = parseInt(localStorage.getItem(BEST_KEY),10); return isNaN(v)?0:v; }
+  function setBest(v){ try{ localStorage.setItem(BEST_KEY, String(v)); }catch(e){} }
+
+  function newProblem(){
+    // bias slightly away from trivial ×0/×1 by using 2..max most of the time
+    const lo = 2;
+    curA = lo + Math.floor(Math.random()*(maxTable-lo+1));
+    curB = lo + Math.floor(Math.random()*(maxTable-lo+1));
+    curAns = curA*curB;
+    aEl.textContent = curA;
+    bEl.textContent = curB;
+    answerEl.value = "";
+  }
+
+  function flash(cls){
+    problemCard.classList.remove("flash-good","flash-bad");
+    // force reflow so the animation can retrigger
+    void problemCard.offsetWidth;
+    problemCard.classList.add(cls);
+    setTimeout(()=>problemCard.classList.remove(cls), 350);
+  }
+
+  function submitAnswer(){
+    const val = answerEl.value.trim();
+    if(val==="") return;
+    attempts++;
+    if(parseInt(val,10) === curAns){
+      correct++; score++; streak++;
+      if(streak>bestStreak) bestStreak = streak;
+      scoreEl.textContent = score;
+      streakEl.textContent = streak;
+      sfx.correct();
+      flash("flash-good");
+      newProblem();
+    }else{
+      streak = 0;
+      streakEl.textContent = streak;
+      sfx.wrong();
+      flash("flash-bad");
+      answerEl.value = "";
+    }
+  }
+
+  // auto-check: as soon as typed value matches the answer, accept it (no Enter needed)
+  function onType(){
+    const val = answerEl.value.replace(/[^0-9]/g,"");
+    answerEl.value = val;
+    if(val==="") return;
+    if(parseInt(val,10) === curAns){
+      correct++; attempts++; score++; streak++;
+      if(streak>bestStreak) bestStreak = streak;
+      scoreEl.textContent = score;
+      streakEl.textContent = streak;
+      sfx.correct();
+      flash("flash-good");
+      newProblem();
+    }else if(val.length >= String(curAns).length){
+      // typed enough digits and it's wrong -> count as miss, reset field
+      attempts++;
+      streak = 0;
+      streakEl.textContent = streak;
+      sfx.wrong();
+      flash("flash-bad");
+      answerEl.value = "";
+    }
+  }
+
+  function updateTimer(){
+    timeLeft--;
+    timeLeftEl.textContent = timeLeft;
+    const frac = timeLeft / GAME_SECONDS;
+    timerBar.style.strokeDashoffset = CIRC * (1 - frac);
+    if(timeLeft <= 10){
+      timerBar.style.stroke = "#dc2626";
+      timeLeftEl.style.color = "#dc2626";
+      if(timeLeft > 0) sfx.tick();
+    }
+    if(timeLeft <= 0){ endGame(); }
+  }
+
+  function startGame(){
+    score=0; streak=0; bestStreak=0; attempts=0; correct=0;
+    timeLeft=GAME_SECONDS;
+    scoreEl.textContent="0"; streakEl.textContent="0"; timeLeftEl.textContent=GAME_SECONDS;
+    timeLeftEl.style.color=""; timerBar.style.stroke="";
+    timerBar.style.strokeDashoffset = 0;
+    newProblem();
+    show("play");
+    running = true;
+    // focus for physical keyboard (mobile users can use on-screen pad)
+    setTimeout(()=>answerEl.focus(), 60);
+    tickHandle = setInterval(updateTimer, 1000);
+  }
+
+  function runCountdown(){
+    show("play");
+    // hide play interactivity behind overlay
+    countdownEl.classList.add("show");
+    let n = 3;
+    countNum.textContent = n;
+    countNum.style.animation="none"; void countNum.offsetWidth; countNum.style.animation="";
+    sfx.countBeep();
+    const iv = setInterval(()=>{
+      n--;
+      if(n>0){
+        countNum.textContent=n;
+        countNum.style.animation="none"; void countNum.offsetWidth; countNum.style.animation="";
+        sfx.countBeep();
+      }else{
+        countNum.textContent="GO!";
+        countNum.style.animation="none"; void countNum.offsetWidth; countNum.style.animation="";
+        sfx.go();
+        clearInterval(iv);
+        setTimeout(()=>{ countdownEl.classList.remove("show"); startGame(); }, 650);
+      }
+    },800);
+  }
+
+  function endGame(){
+    running=false;
+    clearInterval(tickHandle);
+    const best = getBest();
+    const isRecord = score > best;
+    if(isRecord) setBest(score);
+    finalScoreEl.textContent = score;
+    sumBest.textContent = Math.max(best, score);
+    sumStreak.textContent = bestStreak;
+    const acc = attempts>0 ? Math.round((correct/attempts)*100) : 0;
+    sumAcc.textContent = acc + "%";
+    recordBanner.style.display = isRecord ? "block" : "none";
+    show("end");
+    bestStartEl.textContent = getBest();
+    if(isRecord){ sfx.fanfare(); launchConfetti(); }
+    else { sfx.end(); }
+  }
+
+  // ---------- confetti ----------
+  const cvs = $("confetti"); const cx = cvs.getContext("2d");
+  let confParts = [], confRAF=null;
+  function sizeCanvas(){ cvs.width=innerWidth; cvs.height=innerHeight; }
+  sizeCanvas(); addEventListener("resize", sizeCanvas);
+  function launchConfetti(){
+    const colors=["#4f46e5","#7c3aed","#ec4899","#f59e0b","#10b981","#38bdf8"];
+    confParts=[];
+    for(let i=0;i<140;i++){
+      confParts.push({
+        x:innerWidth/2, y:innerHeight*0.35,
+        vx:(Math.random()-0.5)*11, vy:Math.random()*-13-4,
+        s:5+Math.random()*7, c:colors[i%colors.length],
+        rot:Math.random()*6.28, vr:(Math.random()-0.5)*0.4, life:0
+      });
+    }
+    if(confRAF) cancelAnimationFrame(confRAF);
+    stepConfetti();
+  }
+  function stepConfetti(){
+    cx.clearRect(0,0,cvs.width,cvs.height);
+    let alive=false;
+    confParts.forEach(p=>{
+      p.life++; p.vy+=0.32; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.vx*=0.99;
+      if(p.y < cvs.height+40 && p.life<220){
+        alive=true;
+        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot);
+        cx.fillStyle=p.c; cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);
+        cx.restore();
+      }
+    });
+    if(alive){ confRAF=requestAnimationFrame(stepConfetti); }
+    else { cx.clearRect(0,0,cvs.width,cvs.height); }
+  }
+
+  // ---------- events ----------
+  // range chips
+  $("rangeChips").addEventListener("click", e=>{
+    const chip = e.target.closest(".chip"); if(!chip) return;
+    document.querySelectorAll("#rangeChips .chip").forEach(c=>c.classList.remove("sel"));
+    chip.classList.add("sel");
+    maxTable = parseInt(chip.dataset.max,10);
+  });
+
+  $("startBtn").addEventListener("click", ()=>{ audio(); runCountdown(); });
+  $("againBtn").addEventListener("click", ()=>{ audio(); runCountdown(); });
+  $("menuBtn").addEventListener("click", ()=>{ bestStartEl.textContent=getBest(); show("start"); });
+
+  answerEl.addEventListener("input", ()=>{ if(running) onType(); });
+  answerEl.addEventListener("keydown", e=>{
+    if(e.key==="Enter"){ e.preventDefault(); if(running) submitAnswer(); }
+  });
+
+  // on-screen keypad
+  $("keypad").addEventListener("click", e=>{
+    const k = e.target.closest(".key"); if(!k || !running) return;
+    const key = k.dataset.k;
+    if(key==="del"){ answerEl.value = answerEl.value.slice(0,-1); }
+    else if(key==="enter"){ submitAnswer(); }
+    else { answerEl.value += key; onType(); }
+    answerEl.focus();
+  });
+
+  // sound toggle
+  soundBtn.addEventListener("click", ()=>{
+    soundOn = !soundOn;
+    soundBtn.textContent = soundOn ? "🔊" : "🔇";
+    if(soundOn){ audio(); tone(660,0.08,"sine",0.14,0); }
+  });
+
+  // ---------- init ----------
+  bestStartEl.textContent = getBest();
+})();
+</script>
+</body>
+</html>
