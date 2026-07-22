@@ -11,7 +11,8 @@ Open `minute-math.html` in any modern browser. No build step, no server, no inte
 - **One minute on the clock.** A live countdown ring shows time remaining and turns red for the final 10 seconds.
 - **Every correct answer is a point.** There's no passing score — it's a competition against your own personal best, which is saved in your browser (`localStorage`) between sessions.
 - **Instant feedback.** Answers check as you type, so you never need to press Enter. Correct answers flash green with a chime; misses buzz and reset your streak.
-- **Play your way.** Choose to practice tables up to 5×, 9×, or 12×. Type with a keyboard or use the on-screen keypad on touch devices.
+- **Choose exactly which tables to drill.** Two modes: *Up to a table* includes every table from 1× up to the one you pick, or *Pick each* lets you toggle any individual tables (1×–12×) with All/None shortcuts. Every problem is built only from the tables you selected.
+- **Play your way.** Type with a keyboard or use the on-screen keypad on touch devices.
 - **End-of-round summary.** See your score, accuracy, and best streak — with a confetti celebration and fanfare when you set a new record.
 
 ## Design notes

@@ -84,14 +84,37 @@
 
   .field{margin:0 0 18px;}
   .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;}
-  .chip{
-    border:2px solid #e2e8f0;background:#fff;color:var(--ink);
-    padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;
-    transition:transform .12s ease,border-color .12s ease,background .12s ease;
+
+  /* table selector: segmented mode toggle */
+  .seg{display:flex;gap:4px;background:#f1f5f9;border-radius:14px;padding:4px;margin-bottom:14px;}
+  .seg-btn{
+    flex:1;border:none;background:transparent;font-family:inherit;
+    font-size:14px;font-weight:700;color:var(--muted);
+    padding:10px;border-radius:10px;cursor:pointer;transition:all .15s ease;
   }
-  .chip:hover{transform:translateY(-1px);}
-  .chip.sel{border-color:var(--brand);background:var(--brand);color:#fff;box-shadow:0 6px 16px -6px var(--brand);}
+  .seg-btn.active{background:#fff;color:var(--brand);box-shadow:0 2px 8px -2px rgba(15,23,42,.18);}
+
+  .picker{animation:pop .25s ease;}
+  .picker.shake{animation:shakeBad .35s;}
+  .picker-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .hint{font-size:13px;color:var(--muted);margin:0 0 10px;}
+  .picker-head .hint{margin:0;}
+  .hint.warn{color:var(--bad);font-weight:700;}
+  .mini-actions{display:flex;gap:6px;flex-shrink:0;}
+  .mini{
+    border:1.5px solid #e2e8f0;background:#fff;color:var(--muted);font-family:inherit;
+    font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;transition:all .12s ease;
+  }
+  .mini:hover{border-color:var(--brand);color:var(--brand);}
+
+  .tbl-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;}
+  .tcell{
+    border:2px solid #e2e8f0;background:#fff;color:var(--ink);font-family:inherit;
+    font-size:15px;font-weight:800;padding:11px 0;border-radius:12px;cursor:pointer;
+    transition:transform .1s ease,border-color .12s ease,background .12s ease,color .12s ease;
+  }
+  .tcell:hover{transform:translateY(-1px);border-color:#c7d2fe;}
+  .tcell.sel{border-color:var(--brand);background:var(--brand);color:#fff;box-shadow:0 6px 14px -7px var(--brand);}
 
   .btn{
     display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
@@ -236,11 +259,26 @@
       </ul>
 
       <div class="field">
-        <label>Practice tables up to…</label>
-        <div class="chips" id="rangeChips">
-          <button class="chip" data-max="5">5×</button>
-          <button class="chip" data-max="9">9×</button>
-          <button class="chip sel" data-max="12">12×</button>
+        <label>Which tables do you want to practice?</label>
+        <div class="seg" id="modeSeg">
+          <button class="seg-btn active" data-mode="upto" type="button">Up to a table</button>
+          <button class="seg-btn" data-mode="each" type="button">Pick each</button>
+        </div>
+
+        <div class="picker" id="uptoPanel">
+          <p class="hint">Include every table from 1× up to the one you pick.</p>
+          <div class="tbl-grid" id="uptoGrid"></div>
+        </div>
+
+        <div class="picker" id="eachPanel" hidden>
+          <div class="picker-head">
+            <p class="hint" id="eachHint">Tap the tables to include.</p>
+            <div class="mini-actions">
+              <button class="mini" id="allBtn" type="button">All</button>
+              <button class="mini" id="noneBtn" type="button">None</button>
+            </div>
+          </div>
+          <div class="tbl-grid" id="eachGrid"></div>
         </div>
       </div>
 
@@ -334,7 +372,11 @@
   timerBar.style.strokeDashoffset = 0;
 
   // ---------- state ----------
-  let maxTable = 12;
+  let mode = "upto";                 // "upto" | "each"
+  let uptoN = 12;                    // highest table when in "up to" mode
+  const eachSet = new Set([1,2,3,4,5,6,7,8,9,10,11,12]); // tables chosen in "pick each" mode
+  let eachTouched = false;           // has the user edited "pick each" yet?
+  let activeTables = [];             // snapshot of tables used for the current round
   let curA = 0, curB = 0, curAns = 0;
   let score = 0, streak = 0, bestStreak = 0, attempts = 0, correct = 0;
   let timeLeft = GAME_SECONDS;
@@ -380,11 +422,21 @@
   function getBest(){ const v = parseInt(localStorage.getItem(BEST_KEY),10); return isNaN(v)?0:v; }
   function setBest(v){ try{ localStorage.setItem(BEST_KEY, String(v)); }catch(e){} }
 
+  // which tables are in play, given the current selector state
+  function currentTables(){
+    if(mode === "upto"){
+      const a = [];
+      for(let n=1; n<=uptoN; n++) a.push(n);
+      return a;
+    }
+    return [...eachSet].sort((x,y)=>x-y);
+  }
+
   function newProblem(){
-    // bias slightly away from trivial ×0/×1 by using 2..max most of the time
-    const lo = 2;
-    curA = lo + Math.floor(Math.random()*(maxTable-lo+1));
-    curB = lo + Math.floor(Math.random()*(maxTable-lo+1));
+    // one factor is a chosen "table"; the other is a multiplier 2..12 (skip trivial ×1)
+    const t = activeTables[Math.floor(Math.random()*activeTables.length)];
+    const m = 2 + Math.floor(Math.random()*11);
+    if(Math.random() < 0.5){ curA = t; curB = m; } else { curA = m; curB = t; }
     curAns = curA*curB;
     aEl.textContent = curA;
     bEl.textContent = curB;
@@ -548,16 +600,82 @@
     else { cx.clearRect(0,0,cvs.width,cvs.height); }
   }
 
-  // ---------- events ----------
-  // range chips
-  $("rangeChips").addEventListener("click", e=>{
-    const chip = e.target.closest(".chip"); if(!chip) return;
-    document.querySelectorAll("#rangeChips .chip").forEach(c=>c.classList.remove("sel"));
-    chip.classList.add("sel");
-    maxTable = parseInt(chip.dataset.max,10);
+  // ---------- table selector ----------
+  function buildGrids(){
+    const u = $("uptoGrid"), e = $("eachGrid");
+    for(let n=1; n<=12; n++){
+      const ub = document.createElement("button");
+      ub.type="button"; ub.className="tcell"; ub.dataset.n=n; ub.textContent=n+"×";
+      u.appendChild(ub);
+      const eb = document.createElement("button");
+      eb.type="button"; eb.className="tcell"; eb.dataset.n=n; eb.textContent=n+"×";
+      e.appendChild(eb);
+    }
+    renderUpto(); renderEach();
+  }
+  function renderUpto(){
+    $("uptoGrid").querySelectorAll(".tcell").forEach(c=>{
+      c.classList.toggle("sel", parseInt(c.dataset.n,10) <= uptoN);
+    });
+  }
+  function renderEach(){
+    $("eachGrid").querySelectorAll(".tcell").forEach(c=>{
+      c.classList.toggle("sel", eachSet.has(parseInt(c.dataset.n,10)));
+    });
+    const cnt = eachSet.size;
+    const h = $("eachHint");
+    h.textContent = cnt===0 ? "Pick at least one table to include."
+      : cnt + " table" + (cnt===1?"":"s") + " selected.";
+    h.classList.toggle("warn", cnt===0);
+  }
+
+  $("modeSeg").addEventListener("click", e=>{
+    const b = e.target.closest(".seg-btn"); if(!b) return;
+    mode = b.dataset.mode;
+    document.querySelectorAll("#modeSeg .seg-btn").forEach(x=>x.classList.toggle("active", x===b));
+    const upto = mode==="upto";
+    $("uptoPanel").hidden = !upto;
+    $("eachPanel").hidden = upto;
+    // first time entering "pick each", seed it from the up-to selection for continuity
+    if(!upto && !eachTouched){
+      eachSet.clear();
+      for(let n=1; n<=uptoN; n++) eachSet.add(n);
+      renderEach();
+    }
+  });
+  $("uptoGrid").addEventListener("click", e=>{
+    const c = e.target.closest(".tcell"); if(!c) return;
+    uptoN = parseInt(c.dataset.n,10);
+    renderUpto();
+  });
+  $("eachGrid").addEventListener("click", e=>{
+    const c = e.target.closest(".tcell"); if(!c) return;
+    eachTouched = true;
+    const n = parseInt(c.dataset.n,10);
+    if(eachSet.has(n)) eachSet.delete(n); else eachSet.add(n);
+    renderEach();
+  });
+  $("allBtn").addEventListener("click", ()=>{
+    eachTouched = true; eachSet.clear();
+    for(let n=1; n<=12; n++) eachSet.add(n);
+    renderEach();
+  });
+  $("noneBtn").addEventListener("click", ()=>{
+    eachTouched = true; eachSet.clear(); renderEach();
   });
 
-  $("startBtn").addEventListener("click", ()=>{ audio(); runCountdown(); });
+  // ---------- events ----------
+  $("startBtn").addEventListener("click", ()=>{
+    const tables = currentTables();
+    if(tables.length === 0){
+      const p = $("eachPanel");
+      p.classList.remove("shake"); void p.offsetWidth; p.classList.add("shake");
+      sfx.wrong();
+      return;
+    }
+    activeTables = tables;
+    audio(); runCountdown();
+  });
   $("againBtn").addEventListener("click", ()=>{ audio(); runCountdown(); });
   $("menuBtn").addEventListener("click", ()=>{ bestStartEl.textContent=getBest(); show("start"); });
 
@@ -584,6 +702,7 @@
   });
 
   // ---------- init ----------
+  buildGrids();
   bestStartEl.textContent = getBest();
 })();
 </script>
