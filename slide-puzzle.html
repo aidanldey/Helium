@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#4f46e5" />
+
+<!-- ==========================================================================
+     PUBLISHING NOTE: the canonical/share URL below is set to the file name.
+     If you host this at a different path, update the URL in all THREE places:
+     (1) <link rel="canonical">, (2) <meta property="og:url">, and
+     (3) the "url" field in the JSON-LD structured data at the bottom of <head>.
+     ========================================================================== -->
+
+<!-- Primary SEO -->
+<title>Slide Puzzle — Free 5×5 Sliding Tile Number Game (24 Tiles) | HomeLearners.org</title>
+<meta name="description" content="A free online sliding tile puzzle: slide the 24 numbered tiles into the empty space until they're in order from 1 to 24. Classic 5×5 slide puzzle with light and dark mode, a move counter, and a timer. Great for logic, planning, and spatial reasoning — no sign-up, works on any device." />
+<meta name="keywords" content="slide puzzle, sliding puzzle, sliding tile puzzle, tile puzzle, number puzzle, 24 puzzle, 5x5 puzzle, fifteen puzzle, 15 puzzle, brain game, logic game, spatial reasoning, puzzle game for kids, free online puzzle, homeschool logic game" />
+<meta name="author" content="HomeLearners.org" />
+<meta name="publisher" content="HomeLearners.org" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="rating" content="General" />
+<meta name="audience" content="students, parents, teachers, homeschoolers" />
+<link rel="canonical" href="https://homelearners.org/slide-puzzle.html" />
+
+<!-- Icon (self-contained SVG data URI: indigo tile with a slide arrow) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%234f46e5'/%3E%3Crect%20x='18'%20y='18'%20width='30'%20height='30'%20rx='6'%20fill='white'/%3E%3Crect%20x='52'%20y='18'%20width='30'%20height='30'%20rx='6'%20fill='white'%20opacity='.55'/%3E%3Crect%20x='18'%20y='52'%20width='30'%20height='30'%20rx='6'%20fill='white'%20opacity='.55'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%234f46e5'/%3E%3Crect%20x='18'%20y='18'%20width='30'%20height='30'%20rx='6'%20fill='white'/%3E%3Crect%20x='52'%20y='18'%20width='30'%20height='30'%20rx='6'%20fill='white'%20opacity='.55'/%3E%3Crect%20x='18'%20y='52'%20width='30'%20height='30'%20rx='6'%20fill='white'%20opacity='.55'/%3E%3C/svg%3E" />
+
+<!-- Progressive-web-app / mobile niceties -->
+<meta name="application-name" content="Slide Puzzle" />
+<meta name="apple-mobile-web-app-title" content="Slide Puzzle" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<!-- Open Graph (Facebook, LinkedIn, iMessage, etc.) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="HomeLearners.org" />
+<meta property="og:title" content="Slide Puzzle — Free 5×5 Sliding Tile Number Game" />
+<meta property="og:description" content="Slide the 24 numbered tiles into the empty space until they're in order from 1 to 24. Classic sliding puzzle with light and dark mode. Free, no sign-up, works on any device." />
+<meta property="og:url" content="https://homelearners.org/slide-puzzle.html" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Slide Puzzle — Free 5×5 Sliding Tile Number Game" />
+<meta name="twitter:description" content="Get all 24 tiles in order by sliding them into the empty space. Light and dark mode, move counter, and timer. Free, no sign-up, works on any device. From HomeLearners.org." />
+
+<!-- Structured data: helps Google rich results and AI assistants understand
+     and recommend this as a free educational logic-puzzle resource. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LearningResource", "WebApplication", "Game"],
+  "name": "Slide Puzzle",
+  "alternateName": "5x5 Sliding Tile Puzzle (24 Puzzle)",
+  "url": "https://homelearners.org/slide-puzzle.html",
+  "description": "A free online sliding tile puzzle. Twenty-four numbered tiles share a 5×5 grid with one empty space; tap any tile next to the space to slide it, and keep going until the tiles read 1 through 24 in order. Includes light and dark mode, a move counter, a timer, and saved personal bests. Builds logical thinking, planning, and spatial reasoning.",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "isFamilyFriendly": true,
+  "applicationCategory": ["GameApplication", "EducationalApplication"],
+  "applicationSubCategory": "Puzzle Game",
+  "genre": "Puzzle",
+  "operatingSystem": "Any (modern web browser)",
+  "browserRequirements": "Requires a modern web browser with JavaScript enabled. No installation or sign-up.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "playMode": "SinglePlayer",
+  "numberOfPlayers": { "@type": "QuantitativeValue", "value": 1 },
+  "learningResourceType": ["Game", "Interactive activity", "Puzzle"],
+  "educationalUse": ["Practice", "Skill building", "Enrichment"],
+  "interactivityType": "active",
+  "teaches": [
+    "Logical reasoning",
+    "Spatial reasoning",
+    "Sequencing and ordering numbers",
+    "Planning ahead and problem solving",
+    "Persistence"
+  ],
+  "about": ["Sliding puzzles", "Logic puzzles", "Spatial reasoning", "Problem solving"],
+  "educationalLevel": ["Grade 2", "Grade 3", "Grade 4", "Grade 5", "Middle school", "All ages"],
+  "typicalAgeRange": "6-",
+  "audience": [
+    { "@type": "EducationalAudience", "educationalRole": "student" },
+    { "@type": "EducationalAudience", "educationalRole": "parent" },
+    { "@type": "EducationalAudience", "educationalRole": "teacher" },
+    { "@type": "Audience", "audienceType": "Homeschoolers" }
+  ],
+  "keywords": "slide puzzle, sliding puzzle, sliding tile puzzle, number puzzle, 24 puzzle, 5x5 puzzle, 15 puzzle, brain game, logic game, spatial reasoning, free online puzzle, homeschool logic game",
+  "featureList": [
+    "5×5 grid with 24 numbered tiles and one empty space",
+    "Tap or click any tile beside the empty space to slide it — arrow keys work too",
+    "Light mode and dark mode, remembered between visits",
+    "Move counter and timer, with saved personal bests",
+    "Always shuffled to a solvable puzzle",
+    "Works on phones, tablets, and computers — no install and no sign-up required"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "HomeLearners.org",
+    "url": "https://homelearners.org"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "HomeLearners.org",
+    "url": "https://homelearners.org"
+  }
+}
+</script>
+<style>
+  /* ---------- THEME TOKENS ----------
+     Light is the default set on :root; [data-theme="dark"] overrides it.
+     The theme lives on <html> so it can be applied before first paint. */
+  :root{
+    --bg-1:#eef2ff;
+    --bg-2:#faf5ff;
+    --blob-1:#a5b4fc;
+    --blob-2:#d8b4fe;
+    --blob-3:#7dd3fc;
+    --blob-alpha:.55;
+
+    --card:#ffffff;
+    --card-line:#e9edf5;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --faint:#94a3b8;
+
+    --brand:#4f46e5;
+    --brand-2:#7c3aed;
+    --gold:#f59e0b;
+
+    --board:#e6eaf5;
+    --board-line:#d7ddec;
+    --slot:#d5dceb;          /* the empty space */
+
+    --tile-1:#5b57e8;        /* tile gradient */
+    --tile-2:#7c3aed;
+    --tile-ink:#ffffff;
+    --tile-shadow:0 6px 14px -8px rgba(49,46,129,.9);
+    --tile-home:#16a34a;     /* accent for a tile already in its final spot */
+    --tile-hint:rgba(255,255,255,.9);  /* ring on a tile that can slide */
+
+    --chip:#f1f5f9;
+    --chip-hover:#e2e8f0;
+    --shadow:0 24px 60px -20px rgba(15,23,42,.35);
+    --radius:26px;
+  }
+
+  [data-theme="dark"]{
+    --bg-1:#0b1020;
+    --bg-2:#161033;
+    --blob-1:#4338ca;
+    --blob-2:#7e22ce;
+    --blob-3:#0369a1;
+    --blob-alpha:.38;
+
+    --card:#141a2e;
+    --card-line:#26304a;
+    --ink:#e8ecf7;
+    --muted:#94a3b8;
+    --faint:#64748b;
+
+    --brand:#818cf8;
+    --brand-2:#c084fc;
+    --gold:#fbbf24;
+
+    --board:#0e1425;
+    --board-line:#232c45;
+    --slot:#0a0f1c;
+
+    --tile-1:#3f3fa8;
+    --tile-2:#6d28d9;
+    --tile-ink:#f5f3ff;
+    --tile-shadow:0 6px 16px -8px rgba(0,0,0,.85);
+    --tile-home:#34d399;
+    --tile-hint:rgba(196,181,253,.95);
+
+    --chip:#1e2742;
+    --chip-hover:#2a3554;
+    --shadow:0 24px 60px -20px rgba(0,0,0,.75);
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;}
+  body{
+    font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    min-height:100dvh;
+    /* column flex + margin:auto on the card centers it when it fits and
+       stays fully scrollable when the card is taller than the viewport. */
+    display:flex;
+    flex-direction:column;
+    padding:18px;
+    overflow-x:hidden;
+    background:linear-gradient(160deg,var(--bg-1),var(--bg-2));
+    transition:background .35s ease,color .35s ease;
+  }
+
+  /* floating background blobs */
+  .blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:var(--blob-alpha);z-index:0;pointer-events:none;transition:background .35s ease,opacity .35s ease;}
+  .blob.a{width:340px;height:340px;background:var(--blob-1);top:-90px;left:-70px;animation:drift 18s ease-in-out infinite;}
+  .blob.b{width:300px;height:300px;background:var(--blob-2);bottom:-90px;right:-50px;animation:drift 22s ease-in-out infinite reverse;}
+  .blob.c{width:220px;height:220px;background:var(--blob-3);bottom:22%;left:6%;animation:drift 26s ease-in-out infinite;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,-30px) scale(1.12);}}
+
+  .card{
+    position:relative;z-index:1;
+    width:min(460px,100%);
+    margin:auto;            /* scroll-safe centering (see body comment) */
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px 22px 20px;
+    overflow:hidden;
+    transition:background .35s ease;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0 0 auto 0;height:6px;
+    background:linear-gradient(90deg,var(--brand),var(--brand-2),#ec4899);
+  }
+
+  /* ---------- header ---------- */
+  .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;}
+  h1{font-size:27px;line-height:1.05;margin:4px 0 2px;letter-spacing:-.02em;}
+  h1 .accent{background:linear-gradient(90deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .tag{color:var(--muted);font-size:14px;margin:0 0 5px;}
+  .byline{font-size:12.5px;color:var(--faint);margin:0;font-weight:600;}
+  .byline a{color:var(--brand);text-decoration:none;font-weight:700;border-bottom:1px solid transparent;transition:border-color .15s ease;}
+  .byline a:hover{border-bottom-color:var(--brand);}
+
+  .toggles{display:flex;gap:8px;flex-shrink:0;}
+  .icon-btn{
+    width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;
+    background:var(--chip);color:var(--ink);font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s ease,transform .12s ease;
+  }
+  .icon-btn:hover{background:var(--chip-hover);}
+  .icon-btn:active{transform:scale(.92);}
+
+  /* ---------- HUD ---------- */
+  .hud{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+    background:var(--chip);border-radius:16px;padding:10px 6px;margin-bottom:14px;
+    transition:background .35s ease;
+  }
+  .stat{text-align:center;}
+  .stat .num{font-size:23px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;}
+  .stat .num.moves{color:var(--brand);}
+  .stat .num.time{color:var(--brand-2);}
+  .stat .num.best{color:var(--gold);}
+  .stat .cap{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:800;margin-top:4px;}
+
+  /* ---------- BOARD ----------
+     Tiles are absolutely positioned and moved with `transform`, so a slide
+     is one cheap GPU-composited transition rather than a re-layout. */
+  .board-wrap{position:relative;display:flex;justify-content:center;}
+  .board{
+    --gap:6px;
+    --size:min(84vw,392px);
+    position:relative;
+    width:var(--size);height:var(--size);
+    background:var(--board);
+    border:1px solid var(--board-line);
+    border-radius:20px;
+    transition:background .35s ease,border-color .35s ease;
+  }
+  .board.shake{animation:nudge .3s;}
+  @keyframes nudge{25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+  /* the 25 recessed slots sitting under the tiles */
+  .slots{position:absolute;inset:var(--gap);display:grid;grid-template-columns:repeat(5,1fr);gap:var(--gap);}
+  .slots i{background:var(--slot);border-radius:11px;transition:background .35s ease;}
+
+  .tiles{position:absolute;inset:var(--gap);}
+  .tile{
+    position:absolute;top:0;left:0;
+    width:calc((100% - 4 * var(--gap)) / 5);
+    height:calc((100% - 4 * var(--gap)) / 5);
+    /* --c/--r are the tile's column/row; one cell step is its own size + a gap */
+    transform:translate(calc(var(--c) * (100% + var(--gap))), calc(var(--r) * (100% + var(--gap))));
+    display:flex;align-items:center;justify-content:center;
+    border:none;border-radius:11px;cursor:pointer;
+    font-family:inherit;font-weight:800;font-variant-numeric:tabular-nums;
+    font-size:calc(var(--size) * .085);
+    color:var(--tile-ink);
+    background:linear-gradient(150deg,var(--tile-1),var(--tile-2));
+    box-shadow:var(--tile-shadow);
+    touch-action:manipulation;user-select:none;
+    transition:transform .15s cubic-bezier(.25,.8,.3,1),
+               box-shadow .15s ease,filter .15s ease,background .35s ease;
+  }
+  .tile:hover{filter:brightness(1.08);}
+  .tile:active{filter:brightness(.94);}
+  .tile:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  /* a tile that can legally slide right now */
+  .tile.movable{box-shadow:var(--tile-shadow),0 0 0 3px var(--tile-hint) inset;}
+  /* a tile already sitting in its finished position */
+  .tile.home::after{
+    content:"";position:absolute;left:50%;bottom:7px;transform:translateX(-50%);
+    width:14px;height:2.5px;border-radius:2px;background:var(--tile-home);opacity:.9;
+  }
+  .board.solved .tile{
+    background:linear-gradient(150deg,var(--tile-home),var(--tile-1));
+    cursor:default;
+  }
+  .board.solved .tile.movable{box-shadow:var(--tile-shadow);}
+  .board.solved .tile::after{display:none;}
+
+  /* ---------- win banner ---------- */
+  .win{
+    margin-top:14px;padding:14px 16px;border-radius:18px;text-align:center;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    color:#fff;box-shadow:0 16px 34px -16px var(--brand);
+    display:none;animation:pop .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .win.show{display:block;}
+  .win h2{margin:0 0 4px;font-size:22px;letter-spacing:-.01em;}
+  .win p{margin:0;font-size:14.5px;opacity:.95;font-weight:600;}
+  .win .record{
+    display:inline-block;margin-top:8px;background:var(--gold);color:#3b2600;
+    font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:4px 10px;border-radius:999px;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+
+  /* ---------- controls ---------- */
+  .btn-row{display:flex;gap:10px;margin-top:14px;}
+  .btn{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+    border:none;cursor:pointer;font-family:inherit;
+    font-size:16px;font-weight:800;color:#fff;
+    padding:14px;border-radius:16px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    box-shadow:0 12px 26px -12px var(--brand);
+    transition:transform .12s ease,filter .12s ease,background .35s ease;
+  }
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.06);}
+  .btn:active{transform:translateY(0);}
+  .btn.ghost{background:var(--chip);color:var(--ink);box-shadow:none;}
+  .btn.ghost:hover{background:var(--chip-hover);}
+
+  .how{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid var(--card-line);
+    font-size:13px;color:var(--muted);line-height:1.5;
+  }
+  .how b{color:var(--ink);}
+
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:4;}
+
+  /* Short viewports: tighten everything so the board still fits. */
+  @media (max-height:760px){
+    body{padding:10px;}
+    .card{padding:16px 18px 14px;}
+    h1{font-size:23px;}
+    .tag{font-size:13px;}
+    .board{--size:min(78vw,330px);}
+    .hud{padding:8px 6px;margin-bottom:10px;}
+    .stat .num{font-size:20px;}
+    .btn{padding:12px;font-size:15px;}
+    .how{font-size:12.5px;margin-top:10px;padding-top:10px;}
+  }
+  @media (max-height:620px){
+    .board{--size:min(64vw,270px);}
+    .byline{display:none;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .blob{animation:none;}
+    .tile{transition:box-shadow .15s ease,filter .15s ease;}
+    .win,.board.shake{animation:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+  <canvas id="confetti"></canvas>
+
+  <main class="card">
+    <div class="top">
+      <div>
+        <h1>Slide&nbsp;<span class="accent">Puzzle</span></h1>
+        <p class="tag">Put all 24 tiles in order, 1 to 24.</p>
+        <p class="byline">by <a href="https://homelearners.org" target="_blank" rel="noopener">HomeLearners.org</a></p>
+      </div>
+      <div class="toggles">
+        <button class="icon-btn" id="soundBtn" title="Toggle sound" aria-label="Toggle sound" aria-pressed="true">🔊</button>
+        <button class="icon-btn" id="themeBtn" title="Switch to dark mode" aria-label="Switch to dark mode">🌙</button>
+      </div>
+    </div>
+
+    <div class="hud">
+      <div class="stat"><div class="num moves" id="moveNum">0</div><div class="cap">Moves</div></div>
+      <div class="stat"><div class="num time" id="timeNum">0:00</div><div class="cap">Time</div></div>
+      <div class="stat"><div class="num best" id="bestNum">—</div><div class="cap">Best Moves</div></div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" id="board" role="grid" aria-label="Sliding puzzle, 5 by 5 grid">
+        <div class="slots" aria-hidden="true"></div>
+        <div class="tiles" id="tiles"></div>
+      </div>
+    </div>
+
+    <div class="win" id="win" role="status" aria-live="polite">
+      <h2>🎉 Solved!</h2>
+      <p id="winLine">Nice work.</p>
+      <span class="record" id="winRecord" hidden>New record</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="shuffleBtn">🔀 New Puzzle</button>
+      <button class="btn ghost" id="resetBtn">↺ Restart</button>
+    </div>
+
+    <p class="how">
+      <b>How to play:</b> tap or click any tile that sits directly next to the empty
+      space and it slides in. Keep going until the tiles read 1 to 24 in order, with
+      the space back in the bottom-right corner. On a keyboard, the arrow keys slide
+      the neighbouring tile into the space.
+    </p>
+  </main>
+
+<script>
+(function(){
+  "use strict";
+
+  var N = 5;                 // grid is N x N
+  var CELLS = N * N;         // 25 slots
+  var LAST = CELLS - 1;      // 24 numbered tiles, index 24 is the space
+  var LS_THEME = "slidePuzzle.theme";
+  var LS_SOUND = "slidePuzzle.sound";
+  var LS_BEST  = "slidePuzzle.best5";
+
+  /* ------------------------------------------------------------------
+     Storage helpers — private-mode Safari throws on localStorage, so
+     every access is wrapped and simply degrades to "no saved data".
+     ------------------------------------------------------------------ */
+  function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+
+  /* ---------------------------- THEME ---------------------------- */
+  var themeBtn = document.getElementById("themeBtn");
+
+  function applyTheme(theme){
+    document.documentElement.setAttribute("data-theme", theme);
+    var dark = theme === "dark";
+    themeBtn.textContent = dark ? "☀️" : "🌙";
+    var label = dark ? "Switch to light mode" : "Switch to dark mode";
+    themeBtn.title = label;
+    themeBtn.setAttribute("aria-label", label);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#0b1020" : "#4f46e5");
+  }
+
+  // Saved choice wins; otherwise follow the OS setting.
+  var savedTheme = lsGet(LS_THEME);
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(savedTheme === "dark" || savedTheme === "light" ? savedTheme : (prefersDark ? "dark" : "light"));
+
+  themeBtn.addEventListener("click", function(){
+    var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next);
+    lsSet(LS_THEME, next);
+    blip(520, 0.05, 0.04);
+  });
+
+  // Follow the OS if the player has never picked a theme by hand.
+  if (window.matchMedia){
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var onScheme = function(e){ if (!lsGet(LS_THEME)) applyTheme(e.matches ? "dark" : "light"); };
+    if (mq.addEventListener) mq.addEventListener("change", onScheme);
+    else if (mq.addListener) mq.addListener(onScheme);
+  }
+
+  /* ---------------------------- SOUND ---------------------------- */
+  var soundBtn = document.getElementById("soundBtn");
+  var soundOn = lsGet(LS_SOUND) !== "off";
+  var actx = null;
+
+  function paintSound(){
+    soundBtn.textContent = soundOn ? "🔊" : "🔇";
+    soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+  }
+  paintSound();
+
+  soundBtn.addEventListener("click", function(){
+    soundOn = !soundOn;
+    lsSet(LS_SOUND, soundOn ? "on" : "off");
+    paintSound();
+    if (soundOn) blip(660, 0.06, 0.05);
+  });
+
+  // Every sound is synthesised at runtime, so there are no audio files to load.
+  function blip(freq, dur, gain, type){
+    if (!soundOn) return;
+    try {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === "suspended") actx.resume();
+      var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime;
+      o.type = type || "triangle";
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(gain, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t + dur + 0.02);
+    } catch(e){}
+  }
+
+  function fanfare(){
+    var notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach(function(f, i){
+      setTimeout(function(){ blip(f, 0.32, 0.09, "sine"); }, i * 130);
+    });
+  }
+
+  /* ---------------------------- STATE ----------------------------
+     board[i] holds the tile number sitting in slot i (1..24), or 0 for
+     the empty space. The solved board is [1,2,...,24,0].               */
+  var board = [];
+  var blank = LAST;
+  var tileEls = {};       // tile number -> element
+  var moves = 0;
+  var startedAt = 0;      // 0 until the first move; the clock starts on move 1
+  var elapsed = 0;
+  var ticker = null;
+  var solved = false;
+  var busy = false;       // true while shuffling, to ignore stray taps
+
+  var boardEl   = document.getElementById("board");
+  var tilesEl   = document.getElementById("tiles");
+  var moveNum   = document.getElementById("moveNum");
+  var timeNum   = document.getElementById("timeNum");
+  var bestNum   = document.getElementById("bestNum");
+  var winEl     = document.getElementById("win");
+  var winLine   = document.getElementById("winLine");
+  var winRecord = document.getElementById("winRecord");
+
+  // static slot backdrop
+  var slots = boardEl.querySelector(".slots");
+  for (var s = 0; s < CELLS; s++) slots.appendChild(document.createElement("i"));
+
+  /* --------------------------- BEST SCORES --------------------------- */
+  function loadBest(){
+    try {
+      var raw = lsGet(LS_BEST);
+      if (!raw) return null;
+      var b = JSON.parse(raw);
+      if (b && typeof b.moves === "number" && typeof b.time === "number") return b;
+    } catch(e){}
+    return null;
+  }
+  var best = loadBest();
+
+  function paintBest(){
+    bestNum.textContent = best ? String(best.moves) : "—";
+  }
+  paintBest();
+
+  /* ----------------------------- BUILD ----------------------------- */
+  function buildTiles(){
+    tilesEl.innerHTML = "";
+    tileEls = {};
+    for (var n = 1; n <= LAST; n++){
+      var b = document.createElement("button");
+      b.className = "tile";
+      b.type = "button";
+      b.textContent = String(n);
+      b.dataset.n = String(n);
+      tilesEl.appendChild(b);
+      tileEls[n] = b;
+    }
+  }
+
+  // Push each tile's slot into the CSS custom properties that drive its
+  // transform, which is what animates the slide.
+  function paintPositions(){
+    for (var i = 0; i < CELLS; i++){
+      var n = board[i];
+      if (!n) continue;
+      var el = tileEls[n];
+      el.style.setProperty("--c", i % N);
+      el.style.setProperty("--r", Math.floor(i / N));
+      el.classList.toggle("home", n === i + 1);
+    }
+  }
+
+  function isAdjacent(i, j){
+    var ri = Math.floor(i / N), ci = i % N;
+    var rj = Math.floor(j / N), cj = j % N;
+    return Math.abs(ri - rj) + Math.abs(ci - cj) === 1;
+  }
+
+  // Mark the (up to four) tiles that can legally move, and keep the
+  // accessible labels in sync with where every tile currently sits.
+  function paintHints(){
+    for (var i = 0; i < CELLS; i++){
+      var n = board[i];
+      if (!n) continue;
+      var el = tileEls[n];
+      var movable = !solved && isAdjacent(i, blank);
+      el.classList.toggle("movable", movable);
+      el.disabled = solved;
+      el.setAttribute("aria-label",
+        "Tile " + n + ", row " + (Math.floor(i / N) + 1) + ", column " + (i % N + 1) +
+        (solved ? "" : (movable ? " — can slide" : " — cannot move yet")));
+    }
+  }
+
+  function isSolved(){
+    for (var i = 0; i < LAST; i++) if (board[i] !== i + 1) return false;
+    return board[LAST] === 0;
+  }
+
+  function neighbors(i){
+    var r = Math.floor(i / N), c = i % N, out = [];
+    if (r > 0) out.push(i - N);
+    if (r < N - 1) out.push(i + N);
+    if (c > 0) out.push(i - 1);
+    if (c < N - 1) out.push(i + 1);
+    return out;
+  }
+
+  /* ---------------------------- SHUFFLE ----------------------------
+     Shuffling by walking the empty space around from a solved board
+     guarantees the result is always solvable — half of all random
+     arrangements of a 5x5 board are not. The walk never immediately
+     undoes its own previous step, so it doesn't stall in one corner. */
+  function shuffle(){
+    board = [];
+    for (var i = 1; i <= LAST; i++) board.push(i);
+    board.push(0);
+    blank = LAST;
+
+    var prev = -1;
+    for (var k = 0; k < 800; k++){
+      var opts = neighbors(blank).filter(function(x){ return x !== prev; });
+      var pick = opts[Math.floor(Math.random() * opts.length)];
+      board[blank] = board[pick];
+      board[pick] = 0;
+      prev = blank;
+      blank = pick;
+    }
+    // Astronomically unlikely, but never hand the player a finished board.
+    if (isSolved()) shuffle();
+  }
+
+  /* ----------------------------- CLOCK ----------------------------- */
+  function fmt(ms){
+    var total = Math.floor(ms / 1000);
+    var m = Math.floor(total / 60), sec = total % 60;
+    return m + ":" + (sec < 10 ? "0" : "") + sec;
+  }
+
+  function tick(){
+    elapsed = Date.now() - startedAt;
+    timeNum.textContent = fmt(elapsed);
+  }
+
+  function startClock(){
+    if (ticker) return;
+    startedAt = Date.now() - elapsed;
+    ticker = setInterval(tick, 250);
+  }
+
+  function stopClock(){
+    if (ticker){ clearInterval(ticker); ticker = null; }
+  }
+
+  /* ------------------------------ MOVE ------------------------------ */
+  function slide(from){
+    if (busy || solved) return false;
+    if (!isAdjacent(from, blank)) return false;
+
+    board[blank] = board[from];
+    board[from] = 0;
+    blank = from;
+
+    moves++;
+    moveNum.textContent = String(moves);
+    startClock();
+
+    paintPositions();
+    paintHints();
+    blip(300 + Math.random() * 60, 0.06, 0.05, "square");
+
+    if (isSolved()) finish();
+    return true;
+  }
+
+  function reject(){
+    if (solved) return;
+    boardEl.classList.remove("shake");
+    void boardEl.offsetWidth;          // restart the animation
+    boardEl.classList.add("shake");
+    blip(140, 0.1, 0.045, "sawtooth");
+  }
+
+  function finish(){
+    solved = true;
+    stopClock();
+    tick();
+    boardEl.classList.add("solved");
+    paintHints();
+
+    var beatMoves = !best || moves < best.moves;
+    var beatTime  = !best || elapsed < best.time;
+
+    winLine.textContent = "Solved in " + moves + " move" + (moves === 1 ? "" : "s") +
+                          " and " + fmt(elapsed) + ".";
+    if (beatMoves && beatTime)      showRecord("New record — moves & time!");
+    else if (beatMoves)             showRecord("New record — fewest moves!");
+    else if (beatTime)              showRecord("New record — fastest time!");
+    else                            winRecord.hidden = true;
+
+    best = {
+      moves: best ? Math.min(best.moves, moves) : moves,
+      time:  best ? Math.min(best.time, elapsed) : elapsed
+    };
+    lsSet(LS_BEST, JSON.stringify(best));
+    paintBest();
+
+    winEl.classList.add("show");
+    fanfare();
+    confetti();
+  }
+
+  function showRecord(text){
+    winRecord.textContent = text;
+    winRecord.hidden = false;
+  }
+
+  /* ------------------------------ INPUT ------------------------------ */
+  tilesEl.addEventListener("click", function(e){
+    var el = e.target.closest(".tile");
+    if (!el) return;
+    var n = Number(el.dataset.n);
+    var from = board.indexOf(n);
+    if (!slide(from)) reject();
+  });
+
+  // Arrow keys slide the tile on that side of the space into it, i.e.
+  // ArrowUp moves the tile *below* the space up. Same feel as dragging
+  // the space around with the keyboard.
+  var KEYS = {
+    ArrowUp: N, ArrowDown: -N, ArrowLeft: 1, ArrowRight: -1,
+    w: N, s: -N, a: 1, d: -1
+  };
+
+  document.addEventListener("keydown", function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (!(key in KEYS)) return;
+    e.preventDefault();
+
+    var from = blank + KEYS[key];
+    // Horizontal moves must stay on the blank's own row.
+    var sameRow = Math.abs(KEYS[key]) === 1;
+    if (from < 0 || from >= CELLS || (sameRow && Math.floor(from / N) !== Math.floor(blank / N))){
+      reject();
+      return;
+    }
+    if (!slide(from)) reject();
+  });
+
+  /* ----------------------------- NEW GAME ----------------------------- */
+  function newGame(reshuffle){
+    busy = true;
+    if (reshuffle) shuffle();
+    else { board = startBoard.slice(); blank = board.indexOf(0); }
+
+    startBoard = board.slice();
+    moves = 0; elapsed = 0; startedAt = 0; solved = false;
+    stopClock();
+    moveNum.textContent = "0";
+    timeNum.textContent = "0:00";
+    winEl.classList.remove("show");
+    winRecord.hidden = true;
+    boardEl.classList.remove("solved");
+
+    paintPositions();
+    paintHints();
+    busy = false;
+  }
+
+  var startBoard = [];
+
+  document.getElementById("shuffleBtn").addEventListener("click", function(){
+    newGame(true);
+    blip(440, 0.08, 0.05);
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    newGame(false);
+    blip(380, 0.08, 0.05);
+  });
+
+  /* ----------------------------- CONFETTI ----------------------------- */
+  var canvas = document.getElementById("confetti");
+  var ctx = canvas.getContext("2d");
+  var bits = [];
+  var raf = null;
+
+  function sizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  sizeCanvas();
+  window.addEventListener("resize", sizeCanvas);
+
+  function confetti(){
+    var colors = ["#4f46e5","#7c3aed","#ec4899","#f59e0b","#22c55e","#38bdf8"];
+    bits = [];
+    for (var i = 0; i < 130; i++){
+      bits.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * canvas.height * 0.4,
+        w: 6 + Math.random() * 6,
+        h: 8 + Math.random() * 8,
+        vy: 2 + Math.random() * 3.5,
+        vx: -1.4 + Math.random() * 2.8,
+        rot: Math.random() * Math.PI,
+        vr: -0.15 + Math.random() * 0.3,
+        c: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+    if (!raf) raf = requestAnimationFrame(drawConfetti);
+  }
+
+  function drawConfetti(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+    for (var i = 0; i < bits.length; i++){
+      var b = bits[i];
+      b.x += b.vx; b.y += b.vy; b.rot += b.vr;
+      if (b.y < canvas.height + 30) alive = true;
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.rot);
+      ctx.fillStyle = b.c;
+      ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+      ctx.restore();
+    }
+    if (alive){
+      raf = requestAnimationFrame(drawConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      raf = null;
+    }
+  }
+
+  /* ------------------------------- GO ------------------------------- */
+  buildTiles();
+  newGame(true);
+})();
+</script>
+</body>
+</html>
